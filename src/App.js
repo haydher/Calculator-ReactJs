@@ -1,19 +1,19 @@
-import { evaluate } from "mathjs";
-import "./App.css";
 import { useState, useEffect } from "react";
-import Button from "./components/Button";
-import Input from "./components/Input";
+import { evaluate } from "mathjs";
+import { ThemeProvider } from "styled-components";
+import { lightTheme, darkTheme } from "./components/styles/Theme";
+import { GlobalComponents } from "./components/styles/GlobalComponents";
+import { Container } from "./components/styles/Container";
+import InputComponent from "./components/Input";
+import { BtnContainer, ButtonsRowContainer } from "./components/styles/BtnContainer.styles";
+import { Btn1, Btn2, Btn3, Btn4 } from "./components/styles/Buttons.styles";
+import { ThemeToggler } from "./components/styles/ThemeToggler.styles";
 
 const App = () => {
- const containerStyle = {
-  backgroundColor: "#2f2c3b",
-  borderRadius: "12px",
-  boxShadow:
-   "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
- };
-
  const [inputText, setInputText] = useState(["0"]);
  const [result, setResult] = useState("0");
+ const [theme, setTheme] = useState("light");
+ const [themeImgToggler, setThemeImgToggler] = useState("darkThemeImg");
 
  const ops = ["/", "*", "+", "-", ".", "x"];
  const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
@@ -23,7 +23,7 @@ const App = () => {
  useEffect(() => {
   const myListener = (event) => {
    if (validInput.includes(event.key)) updateInput(event.key);
-   else if (event.key == "Enter") computeResults();
+   else if (event.key === "Enter") computeResults();
   };
   document.addEventListener("keydown", myListener);
 
@@ -59,53 +59,65 @@ const App = () => {
   setInputText([...value]);
  };
 
+ //clears all the inputs
  const allClear = () => {
   setInputText(["0"]);
   setResult(["0"]);
  };
 
+ // positive and negative sign
  const changeSign = () => {
   setInputText((prevState) => ["-", ...prevState]);
  };
 
- return (
-  <div className="App">
-   <div className="container" style={containerStyle}>
-    <Input text={inputText} result={result} />
+ // toggle theme
+ const toggleTheme = () => {
+  themeImgToggler === "darkThemeImg" ? setThemeImgToggler("lightThemeImg") : setThemeImgToggler("darkThemeImg");
+  theme === "light" ? setTheme("dark") : setTheme("light");
+ };
 
-    <div className="btnContainer">
-     <div className="buttons">
-      <Button variant={"btn1"} symbol={"AC"} onClick={allClear} />
-      <Button variant={"btn2"} symbol={"+/-"} onClick={changeSign} />
-      <Button variant={"btn2"} symbol={"DEL"} onClick={deleteInput} />
-      <Button variant={"btn3"} symbol={"/"} onClick={updateInput} />
-     </div>
-     <div className="buttons">
-      <Button variant={"btn2"} symbol={"7"} onClick={updateInput} />
-      <Button variant={"btn2"} symbol={"8"} onClick={updateInput} />
-      <Button variant={"btn2"} symbol={"9"} onClick={updateInput} />
-      <Button variant={"btn3"} symbol={"*"} onClick={updateInput} />
-     </div>
-     <div className="buttons">
-      <Button variant={"btn2"} symbol={"4"} onClick={updateInput} />
-      <Button variant={"btn2"} symbol={"5"} onClick={updateInput} />
-      <Button variant={"btn2"} symbol={"6"} onClick={updateInput} />
-      <Button variant={"btn3"} symbol={"-"} onClick={updateInput} />
-     </div>
-     <div className="buttons">
-      <Button variant={"btn2"} symbol={"1"} onClick={updateInput} />
-      <Button variant={"btn2"} symbol={"2"} onClick={updateInput} />
-      <Button variant={"btn2"} symbol={"3"} onClick={updateInput} />
-      <Button variant={"btn3"} symbol={"+"} onClick={updateInput} />
-     </div>
-     <div className="buttons">
-      <Button variant={"btn2"} symbol={"0"} onClick={updateInput} />
-      <Button variant={"btn2"} symbol={"."} onClick={updateInput} />
-      <Button variant={"btn4"} symbol={"="} onClick={computeResults} />
-     </div>
-    </div>
+ return (
+  <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
+   <div className="App">
+    <Container>
+     <GlobalComponents />
+     <InputComponent text={inputText} result={result} />
+
+     <BtnContainer>
+      <ButtonsRowContainer>
+       <Btn1 variant={"btn1"} symbol={"AC"} onClick={allClear} />
+       <Btn2 variant={"btn2"} symbol={"+/-"} onClick={changeSign} />
+       <Btn2 variant={"btn2"} symbol={"DEL"} onClick={deleteInput} />
+       <Btn3 variant={"btn3"} symbol={"/"} onClick={updateInput} />
+      </ButtonsRowContainer>
+      <ButtonsRowContainer>
+       <Btn2 variant={"btn2"} symbol={"7"} onClick={updateInput} />
+       <Btn2 variant={"btn2"} symbol={"8"} onClick={updateInput} />
+       <Btn2 variant={"btn2"} symbol={"9"} onClick={updateInput} />
+       <Btn3 variant={"btn3"} symbol={"*"} onClick={updateInput} />
+      </ButtonsRowContainer>
+      <ButtonsRowContainer>
+       <Btn2 variant={"btn2"} symbol={"4"} onClick={updateInput} />
+       <Btn2 variant={"btn2"} symbol={"5"} onClick={updateInput} />
+       <Btn2 variant={"btn2"} symbol={"6"} onClick={updateInput} />
+       <Btn3 variant={"btn3"} symbol={"-"} onClick={updateInput} />
+      </ButtonsRowContainer>
+      <ButtonsRowContainer>
+       <Btn2 variant={"btn2"} symbol={"1"} onClick={updateInput} />
+       <Btn2 variant={"btn2"} symbol={"2"} onClick={updateInput} />
+       <Btn2 variant={"btn2"} symbol={"3"} onClick={updateInput} />
+       <Btn3 variant={"btn3"} symbol={"+"} onClick={updateInput} />
+      </ButtonsRowContainer>
+      <ButtonsRowContainer>
+       <ThemeToggler onClick={toggleTheme} imgSrc={themeImgToggler} />
+       <Btn2 variant={"btn2"} symbol={"0"} onClick={updateInput} />
+       <Btn2 variant={"btn2"} symbol={"."} onClick={updateInput} />
+       <Btn4 variant={"btn4"} symbol={"="} onClick={computeResults} />
+      </ButtonsRowContainer>
+     </BtnContainer>
+    </Container>
    </div>
-  </div>
+  </ThemeProvider>
  );
 };
 

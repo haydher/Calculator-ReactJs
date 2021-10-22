@@ -1,17 +1,13 @@
 import React from "react";
-import "./Input.css";
+import { InputDiv, H1, H2 } from "./styles/Input.styles";
 
-const Input = ({ text, result }) => {
+const InputComponent = ({ text, result }) => {
  return (
-  <div className="input">
-   <div className="results">
-    <h2>{result}</h2>
-   </div>
-   <div className="inputText">
-    <h1>{text}</h1>
-   </div>
-  </div>
+  <InputDiv>
+   <H1>{result}</H1>
+   <H2>{text}</H2>
+  </InputDiv>
  );
 };
 
-export default Input;
+export default InputComponent;
